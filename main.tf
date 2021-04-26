@@ -3,12 +3,12 @@ provider "aws" {
 }
 
 resource "aws_synthetics_canary" "canary_artifactory" {
-  name                 = format("canary-%s", var.name)
   artifact_s3_location = format("s3://canary-data-%s/", var.name)
   execution_role_arn   = aws_iam_role.cloudwatch_canary_role.arn
   handler              = var.handler
-  zip_file             = format("script/%s",var.script_name)
+  name                 = format("canary-%s", var.name)
   runtime_version      = var.runtime_version
+  zip_file             = format("script/%s",var.script_name)
 
   schedule {
     expression = "rate(0 minute)"
@@ -85,6 +85,6 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_canary_attachment" {
-  role       = aws_iam_role.cloudwatch_canary_role.name
   policy_arn = aws_iam_policy.cloudwatch_canary_policy.arn
+  role       = aws_iam_role.cloudwatch_canary_role.name
 }
