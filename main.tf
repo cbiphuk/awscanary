@@ -1,5 +1,12 @@
 provider "aws" {
   region = "us-east-1"
+
+  default_tags {
+    tags = {
+      Owner = "Terraform"
+      Repo = "git@github.com:cbiphuk/awscanary.git"
+    }
+  }
 }
 
 resource "aws_synthetics_canary" "canary_artifactory" {
@@ -63,7 +70,12 @@ resource "aws_iam_policy" "cloudwatch_canary_policy" {
             "Effect": "Allow",
             "Action": [
                 "s3:ListAllMyBuckets",
-                "xray:PutTraceSegments"
+                "xray:PutTraceSegments",
+                "secretsmanager:GetRandomPassword",
+                "secretsmanager:GetResourcePolicy",
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+                "secretsmanager:ListSecretVersionIds"
             ],
             "Resource": [
                 "*"
